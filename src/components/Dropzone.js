@@ -1,8 +1,15 @@
 import MP4Img from '../img/mp4.png'
+import {useContext, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
+import { MediaContext } from './Content'
+
+// export const MediaContext = React.createContext()
 
 
-const DropZone = ({setFiles, setIsLoading}) => {
+const DropZone = () => {
+    // const [file, setFiles] = useState()
+    const setMedia = useContext(MediaContext)
+    
     
     const {draggedFiles, getRootProps, getInputProps, isDragActive, isDragReject} = useDropzone({
         accept: "image/gif, video/mp4, video/webm",
@@ -10,34 +17,17 @@ const DropZone = ({setFiles, setIsLoading}) => {
             console.log(acceptedFiles, 'fasdfsf')
             var reader = new FileReader();
             reader.readAsDataURL(acceptedFiles[0]);
-            console.log(reader)
-            setFiles(
-                acceptedFiles.map((file) => 
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file),
-                    base64: reader
-                }))
+            // console.log(URL.createObjectURL(acceptedFiles[0]))
+            acceptedFiles.map((file) =>
+            Object.assign(file, {
+                preview: URL.createObjectURL(file),
+                base64: reader
+            })
             )
-            setIsLoading(true)
-            console.log(draggedFiles)
+            setMedia(acceptedFiles[0])
+            console.log(acceptedFiles[0])
         },
-        init: ()=>{
-            console.log("uploadComplete")
-        }
-
     })
-   
-    // const images = files.map((file) => (
-    //     <div key={file.name}>
-    //         <div>
-    //             {/* <img src={file.preview} style={{width: "200px"}} alt="preview"/> */}
-    //             <video src={file.preview} style={{width: "500px"}}>
-    //                 {/* <source s type="video/mp4"/> */}
-    //             </video>
-    //         </div>
-    //     </div>
-    // ))
-
 
     return(
         
@@ -62,7 +52,6 @@ const DropZone = ({setFiles, setIsLoading}) => {
                     </div>
                 </div>
             </div>
-            
             {/* <div>{images}</div> */}
         </div>
         
